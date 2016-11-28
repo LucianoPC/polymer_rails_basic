@@ -19,10 +19,13 @@
 			}
 
       .form-buttons > paper-button {
-        background: var(--paper-light-blue-500);
         color: white;
         margin-top: 20px;
         width: 35%;
+      }
+
+      .form-buttons > paper-button:not([disabled]) {
+        background: var(--paper-light-blue-500);
       }
 
       .form-buttons {
@@ -45,7 +48,7 @@
       </div>
 
       <div class="form-buttons">
-        <paper-button raised on-tap="submit">Atualizar</paper-button>
+        <paper-button id="button" raised on-tap="submit">Atualizar</paper-button>
       </div>
     </div>
 
@@ -74,28 +77,32 @@
       is: 'edit-profile-form',
 
       ready: function() {
-        this.$.spinner.active = true;
+        this._setActiveSpinner(true);
+
         this.$.xhrUpdate.form = this;
         this.$.xhrGetUser.submit();
       },
 
       submit: function() {
-        this.$.spinner.active = true;
+        this._setActiveSpinner(true);
         this.$.xhrUpdate.submit();
       },
 
       getUserResponse: function() {
-        this.$.spinner.active = false;
+        this._setActiveSpinner(false);
+
         var response = this.$.xhrGetUser.lastResponse;
         this.$.name.value = response["name"];
         this.$.email.value = response["email"];
       },
 
       updateError: function() {
+        this._setActiveSpinner(false);
         this.$.spinner.active = false;
       },
 
       updateResponse: function() {
+        this._setActiveSpinner(false);
         this.$.spinner.active = false;
         this.$.dialog.open();
       },
@@ -106,6 +113,19 @@
         this.$.current_password.value = '';
       },
 
+      _setActiveSpinner: function(active) {
+        this._setFieldsEnable(!active);
+        this.$.spinner.active = active;
+      },
+
+      _setFieldsEnable: function(enable) {
+        this.$.name.disabled = !enable;
+        this.$.email.disabled = !enable;
+        this.$.password.disabled = !enable;
+        this.$.password_confirmation.disabled = !enable;
+        this.$.current_password.disabled = !enable;
+        this.$.button.disabled = !enable;
+      },
     });
   </script>
 </dom-module>

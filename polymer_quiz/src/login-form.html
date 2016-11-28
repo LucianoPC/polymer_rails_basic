@@ -21,10 +21,13 @@
 			}
 
       .form-buttons > paper-button {
-        background: var(--paper-light-blue-500);
         color: white;
         margin-top: 20px;
         width: 35%;
+      }
+
+      .form-buttons > paper-button:not([disabled]) {
+        background: var(--paper-light-blue-500);
       }
 
       .form-buttons > paper-button a {
@@ -49,10 +52,10 @@
       </div>
 
       <div class="form-buttons">
-					<paper-button>
+					<paper-button id="buttonRegister">
 						<a name="register" href="/register">Cadastrar</a>
 					</paper-button>
-          <paper-button raised on-tap="submit">Entrar</paper-button>
+          <paper-button id="buttonSubmit" raised on-tap="submit">Entrar</paper-button>
       </div>
     </div>
 
@@ -82,15 +85,17 @@
       },
 
       submit: function() {
-        this.$.spinner.active = true;
+        this._setActiveSpinner(true);
         this.$.xhr.submit();
       },
 
       handleError: function() {
+        this._setActiveSpinner(false);
         this.$.spinner.active = false;
       },
 
       handleResponse: function() {
+        this._setActiveSpinner(false);
         this.$.spinner.active = false;
         this.$.dialog.open();
       },
@@ -101,6 +106,18 @@
 
         var auth_token = this.$.xhr.getLastResponse()['auth_token'];
         this.fire('login-sucess', auth_token);
+      },
+
+      _setActiveSpinner: function(active) {
+        this._setFieldsEnable(!active);
+        this.$.spinner.active = active;
+      },
+
+      _setFieldsEnable: function(enable) {
+        this.$.email.disabled = !enable;
+        this.$.password.disabled = !enable;
+        this.$.buttonSubmit.disabled = !enable;
+        this.$.buttonRegister.disabled = !enable;
       },
     });
   </script>
