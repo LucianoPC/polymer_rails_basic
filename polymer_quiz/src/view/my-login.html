@@ -1,0 +1,34 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../login-form.html">
+<link rel="import" href="../user-session.html">
+
+<dom-module id="my-login">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+			<login-form on-login-sucess='onLoginSucess'></login-form>
+		</div>
+
+    <user-session id="session"></user-session>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-login',
+
+      onLoginSucess: function(event) {
+        var auth_token = event.detail;
+        this.$.session.login(auth_token);
+        this.set('route.path', '/edit-profile');
+      }
+    });
+  </script>
+</dom-module>

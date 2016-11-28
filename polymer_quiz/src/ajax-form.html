@@ -1,0 +1,132 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="ajax-form">
+  <template>
+
+    <iron-ajax
+      id='xhr'
+      url=[[url]]
+      method=[[method]]
+      handle-as='json'
+      on-error = 'handleError'
+      on-response=[[onResponse]]
+      last-response="{{lastResponse}}"
+      content-type='application/json'
+      debounce-duration="300"></iron-ajax>
+
+    <user-session id="session"></user-session>
+
+  </template>
+
+  <script>
+    Polymer({
+      is: 'ajax-form',
+
+      properties: {
+        form: {
+          type: Object
+        },
+
+        url: {
+          type: String
+        },
+
+        method: {
+          type: String,
+          value: 'POST'
+        },
+
+        lastResponse: {
+          notify: true
+        }
+      },
+
+      submit: function() {
+        if(this.form) {
+          this._clearErrors();
+          this.$.xhr.body = this._getDivParams();
+        }
+
+        this.$.xhr.headers = this._getHeaders();
+        this.$.xhr.generateRequest();
+      },
+
+      getLastResponse: function() {
+        return this.$.xhr.lastResponse;
+      },
+
+      handleError: function(error) {
+        var errors = this.$.xhr.lastError.response;
+
+        for(errorName in errors) {
+          this.form.$[errorName].invalid = true;
+          this.form.$[errorName].errorMessage = errors[errorName][0];
+        }
+
+        this.fire('error');
+      },
+
+      _getHeaders: function() {
+        this.$.session.reload();
+        var token = this.$.session.config.token;
+
+        var headers = {};
+        if(token) {
+          headers = {"Authorization":"Token token=" + token};
+        }
+
+        return headers;
+      },
+
+      _getDivParams: function(divID = 'form', parentDiv = null) {
+        var params = {};
+
+        if(parentDiv == null) {
+          var formChildrens = this.form.$[divID].children;
+        } else {
+          var formChildrens = parentDiv[divID].children;
+        }
+
+        for(index = 0; index < formChildrens.length; index++) {
+          var children = formChildrens[index];
+
+          if(children.tagName == "DIV" && children.id.length > 0) {
+            params[children.id] = this._getDivParams(children.id, formChildrens);
+          }
+
+          if(children.tagName == "PAPER-INPUT") {
+            params[children.id] = children.value;
+          }
+        }
+
+        return params;
+      },
+
+      _clearErrors: function(divID = 'form', parentDiv = null) {
+        if(parentDiv == null) {
+          var formChildrens = this.form.$[divID].children;
+        } else {
+          var formChildrens = parentDiv[divID].children;
+        }
+
+        for(index = 0; index < formChildrens.length; index++) {
+          var children = formChildrens[index];
+
+          if(children.tagName == "DIV" && children.id.length > 0) {
+            this._clearErrors(children.id, formChildrens);
+          }
+
+          if(children.tagName == "PAPER-INPUT") {
+            children.invalid = false;
+          }
+        }
+      }
+    });
+  </script>
+</dom-module>
+

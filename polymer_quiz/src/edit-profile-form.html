@@ -1,0 +1,113 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="ajax-form.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="edit-profile-form">
+  <template>
+    <style include="shared-styles">
+			paper-icon-button {
+				color: var(--paper-red-300);
+				--paper-icon-button-ink-color: var(--paper-red-a100);
+				width: 23px;
+				height: 23px;
+				padding: 0px 4px;
+			}
+
+      .form-buttons > paper-button {
+        background: var(--paper-light-blue-500);
+        color: white;
+        margin-top: 20px;
+        width: 35%;
+      }
+
+      .form-buttons {
+				@apply(--layout-horizontal);
+				@apply(--layout-end-justified);
+      }
+    </style>
+
+    <h1>Editar Perfil
+      <paper-spinner-lite id="spinner"></paper-spinner-lite>
+    </h1>
+
+    <div id="form">
+      <div id="user">
+        <paper-input id="name" label="Nome" autofocus></paper-input>
+        <paper-input id="email" label="E-mail" id='email'> </paper-input>
+        <paper-input id="password" label="Senha (Em branco não altera)" type="password"></paper-input>
+        <paper-input id="password_confirmation" label="Confirmar Senha" type="password"></paper-input>
+        <paper-input id="current_password" label="Senha Atual (Confirmar mudanças)" type="password"></paper-input>
+      </div>
+
+      <div class="form-buttons">
+        <paper-button raised on-tap="submit">Atualizar</paper-button>
+      </div>
+    </div>
+
+    <ajax-form
+      id="xhrUpdate"
+      method="POST"
+      on-error="updateError"
+      on-response="updateResponse"
+      url="http://localhost:3000/users/edit"></ajax-form>
+
+    <ajax-form
+      id="xhrGetUser"
+      method="POST"
+      on-response="getUserResponse"
+      url="http://localhost:3000/users/get_user"></ajax-form>
+
+    <paper-dialog id="dialog"
+      on-iron-overlay-canceled="onDialogClose"
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation" with-backdrop>
+
+      <h2>Atualização realizada!</h2>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'edit-profile-form',
+
+      ready: function() {
+        this.$.spinner.active = true;
+        this.$.xhrUpdate.form = this;
+        this.$.xhrGetUser.submit();
+      },
+
+      submit: function() {
+        this.$.spinner.active = true;
+        this.$.xhrUpdate.submit();
+      },
+
+      getUserResponse: function() {
+        this.$.spinner.active = false;
+        var response = this.$.xhrGetUser.lastResponse;
+        this.$.name.value = response["name"];
+        this.$.email.value = response["email"];
+      },
+
+      updateError: function() {
+        this.$.spinner.active = false;
+      },
+
+      updateResponse: function() {
+        this.$.spinner.active = false;
+        this.$.dialog.open();
+      },
+
+      onDialogClose: function() {
+        this.$.password.value = '';
+        this.$.password_confirmation.value = '';
+        this.$.current_password.value = '';
+      },
+
+    });
+  </script>
+</dom-module>
+

@@ -1,0 +1,36 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../register-form.html">
+<link rel="import" href="../user-session.html">
+
+<dom-module id="my-register">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+			<register-form on-register-sucess='onRegisterSucess'></register-form>
+		</div>
+
+    <user-session id="session"></user-session>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'my-register',
+
+      onRegisterSucess: function(event) {
+        var auth_token = event.detail;
+        this.$.session.login(auth_token);
+        this.set('route.path', '/edit-profile');
+      }
+    });
+  </script>
+</dom-module>

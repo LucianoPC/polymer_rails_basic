@@ -1,0 +1,53 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+
+<dom-module id="user-session">
+
+	<template>
+		<iron-localstorage id="storage" name="my-app-storage"
+			value="{{config}}"
+			on-iron-localstorage-load-empty="initializeDefaultData">
+		</iron-localstorage>
+	</template>
+
+  <script>
+    Polymer({
+      is: 'user-session',
+
+			properties: {
+				config: {
+					type: Object,
+					value: null
+				}
+			},
+
+			ready: function() {
+				this.$.storage.reload();
+			},
+
+			login: function(token) {
+				this.set('config.token', token);
+				this.set('config.logged', true);
+        this.$.storage.save();
+			},
+
+			logout: function(token) {
+				this.set('config.token', null);
+				this.set('config.logged', false);
+        this.$.storage.save();
+			},
+
+      reload: function() {
+				this.$.storage.reload();
+      },
+
+			initializeDefaultData: function() {
+				this.config = {
+					token: null,
+					logged: false
+				}
+			}
+    });
+  </script>
+</dom-module>
+

@@ -1,0 +1,101 @@
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/neon-animation/neon-animation.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="ajax-form.html">
+<link rel="import" href="shared-styles.html">
+
+<dom-module id="register-form">
+  <template>
+    <style include="shared-styles">
+			paper-icon-button {
+				color: var(--paper-red-300);
+				--paper-icon-button-ink-color: var(--paper-red-a100);
+				width: 23px;
+				height: 23px;
+				padding: 0px 4px;
+			}
+
+      .form-buttons > paper-button {
+        background: var(--paper-light-blue-500);
+        color: white;
+        margin-top: 20px;
+        width: 35%;
+      }
+
+      .form-buttons {
+				@apply(--layout-horizontal);
+				@apply(--layout-end-justified);
+      }
+    </style>
+
+    <h1>Cadastro
+      <paper-spinner-lite id="spinner"></paper-spinner-lite>
+    </h1>
+
+    <div id="form">
+      <div id="user">
+        <paper-input id="name" label="Nome" autofocus></paper-input>
+        <paper-input id="email" label="E-mail" id='email'> </paper-input>
+        <paper-input id="password" label="Senha" type="password"></paper-input>
+        <paper-input id="password_confirmation" label="Confirmar Senha" type="password"></paper-input>
+      </div>
+
+      <div class="form-buttons">
+        <paper-button raised on-tap="submit">Cadastrar</paper-button>
+      </div>
+    </div>
+
+    <ajax-form
+      id="xhr"
+      on-error="handleError"
+      on-response="handleResponse"
+      url="http://localhost:3000/users"></ajax-form>
+
+    <paper-dialog id="dialog"
+      on-iron-overlay-canceled="onDialogClose"
+      entry-animation="scale-up-animation"
+      exit-animation="fade-out-animation" with-backdrop>
+
+      <h2>Cadastro realizado!</h2>
+    </paper-dialog>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'register-form',
+
+      ready: function() {
+        this.$.xhr.form = this;
+      },
+
+      submit: function() {
+        this.$.spinner.active = true;
+        this.$.xhr.submit();
+      },
+
+      handleError: function() {
+        this.$.spinner.active = false;
+      },
+
+      handleResponse: function() {
+        this.$.spinner.active = false;
+        this.$.dialog.open();
+      },
+
+      onDialogClose: function() {
+        this.$.name.value = '';
+        this.$.email.value = '';
+        this.$.password.value = '';
+        this.$.password_confirmation.value = '';
+
+        var auth_token = this.$.xhr.getLastResponse()['auth_token'];
+        this.fire('register-sucess', auth_token);
+      },
+
+    });
+  </script>
+</dom-module>
+
