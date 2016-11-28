@@ -10,11 +10,10 @@
 
     <iron-ajax
       id='xhr'
-      url=[[url]]
+      url="[[server]][[url]]"
       method=[[method]]
       handle-as='json'
       on-error = 'handleError'
-      on-response=[[onResponse]]
       last-response="{{lastResponse}}"
       content-type='application/json'
       debounce-duration="300"></iron-ajax>
@@ -34,6 +33,12 @@
 
         url: {
           type: String
+        },
+
+        server: {
+          type: String,
+          value: "http://localhost:3000",
+          readOnly: true
         },
 
         method: {

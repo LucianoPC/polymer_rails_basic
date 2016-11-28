@@ -54,13 +54,12 @@
       method="POST"
       on-error="updateError"
       on-response="updateResponse"
-      url="http://localhost:3000/users/edit"></ajax-form>
+      url="/users/edit"></ajax-form>
 
     <ajax-form
       id="xhrGetUser"
-      method="POST"
       on-response="getUserResponse"
-      url="http://localhost:3000/users/get_user"></ajax-form>
+      url="/users/get_user"></ajax-form>
 
     <paper-dialog id="dialog"
       on-iron-overlay-canceled="onDialogClose"
