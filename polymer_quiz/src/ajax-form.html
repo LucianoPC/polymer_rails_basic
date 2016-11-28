@@ -37,8 +37,8 @@
 
         server: {
           type: String,
-          value: "http://localhost:3000",
-          // value: "https://jaquizbackend.herokuapp.com",
+          // value: "http://localhost:3000",
+          value: "https://jaquizbackend.herokuapp.com",
           readOnly: true
         },
 
@@ -54,8 +54,8 @@
 
       submit: function() {
         if(this.form) {
-          this._clearErrors();
-          this.$.xhr.body = this._getDivParams();
+          this._clearErrors('form', null);
+          this.$.xhr.body = this._getDivParams('form', null);
         }
 
         this.$.xhr.headers = this._getHeaders();
@@ -89,7 +89,7 @@
         return headers;
       },
 
-      _getDivParams: function(divID = 'form', parentDiv = null) {
+      _getDivParams: function(divID, parentDiv) {
         var params = {};
 
         if(parentDiv == null) {
@@ -113,7 +113,7 @@
         return params;
       },
 
-      _clearErrors: function(divID = 'form', parentDiv = null) {
+      _clearErrors: function(divID, parentDiv) {
         if(parentDiv == null) {
           var formChildrens = this.form.$[divID].children;
         } else {
