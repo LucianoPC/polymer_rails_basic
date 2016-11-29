@@ -4,4 +4,5 @@ node_modules/
 bower_components/
 
 .firebaserc
+firebase-debug.log
 database.rules.json
