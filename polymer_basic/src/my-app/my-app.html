@@ -105,7 +105,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </app-toolbar>
         </app-header>
 
-        <!--
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
@@ -116,8 +115,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <my-edit-profile name="edit-profile" route={{route}}></my-edit-profile>
           <my-view404 name="view404"></my-view404>
         </iron-pages>
-        -->
 
+        <!--
         <neon-animated-pages
           selected="[[page]]"
           attr-for-selected="name"
@@ -126,12 +125,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           entry-animation="slide-from-left-animation"
           exit-animation="slide-right-animation">
 
-          <neon-animatable name="login"><my-login route={{route}}></my-login></neon-animatable>
-          <neon-animatable name="register"><my-register route={{route}}></my-register></neon-animatable>
-          <neon-animatable name="edit-profile"><my-edit-profile route={{route}}></my-edit-profile></neon-animatable>
-          <neon-animatable name="view404"><my-view404></my-view404></neon-animatable>
-
+          <my-login name="login" route={{route}}></my-login>
+          <my-register name="register" route={{route}}></my-register>
+          <my-edit-profile name="edit-profile" route={{route}}></my-edit-profile>
+          <my-view404 name="view404"></my-view404>
         </neon-animated-pages>
+        -->
     </app-drawer-layout>
 
     <user-session id="session"></user-session>
