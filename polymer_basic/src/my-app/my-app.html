@@ -28,11 +28,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+
 <link rel="import" href="../user-session/user-session.html">
+<link rel="import" href="../../styles/shared-styles.html">
 
 <dom-module id="my-app">
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         --app-primary-color: #4285f4;
         --app-secondary-color: black;
@@ -134,11 +136,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <user-session id="session"></user-session>
 
-    <paper-dialog id="logoutDialog"
-      backdrop
+    <paper-dialog id="logoutDialog" class="popup"
       on-iron-overlay-canceled="onLogoutDialogClose"
-      entry-animation="scale-up-animation"
-      exit-animation="fade-out-animation" with-backdrop>
+      entry-animation="scale-up-animation">
 
       <h2>Logout realizado!</h2>
     </paper-dialog>
