@@ -13,13 +13,17 @@
     </style>
 
     <div class="card">
-			<edit-profile-form></edit-profile-form>
+			<edit-profile-form id="editProfileForm"></edit-profile-form>
 		</div>
   </template>
 
   <script>
     Polymer({
-      is: 'my-edit-profile'
+      is: 'my-edit-profile',
+
+      onEnter: function() {
+        this.$.editProfileForm.clearFields();
+      },
     });
   </script>
 </dom-module>

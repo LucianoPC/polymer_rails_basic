@@ -14,7 +14,9 @@
     </style>
 
     <div class="card">
-			<login-form on-login-sucess='onLoginSucess'></login-form>
+			<login-form
+        id='loginForm'
+        on-login-sucess='onLoginSucess'></login-form>
 		</div>
 
     <user-session id="session"></user-session>
@@ -23,6 +25,10 @@
   <script>
     Polymer({
       is: 'my-login',
+
+      onEnter: function() {
+        this.$.loginForm.clearFields();
+      },
 
       onLoginSucess: function(event) {
         var auth_token = event.detail;

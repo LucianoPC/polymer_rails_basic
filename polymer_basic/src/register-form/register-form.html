@@ -87,12 +87,21 @@
         this.$.dialog.open();
       },
 
-      onDialogClose: function() {
+      clearFields: function() {
         this.$.name.value = '';
         this.$.email.value = '';
         this.$.password.value = '';
         this.$.password_confirmation.value = '';
 
+        this.$.name.invalid = false;
+        this.$.email.invalid = false;
+        this.$.password.invalid = false;
+        this.$.password_confirmation.invalid = false;
+      },
+
+
+      onDialogClose: function() {
+        this.clearFields();
         var auth_token = this.$.xhr.getLastResponse()['auth_token'];
         this.fire('register-sucess', auth_token);
       },

@@ -109,6 +109,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             selected="[[page]]"
             attr-for-selected="name"
             fallback-selection="view404"
+            on-iron-select="handlePageSelected"
+            on-iron-deselect="handlePageDeselected"
             role="main">
           <my-login name="login" route={{route}}></my-login>
           <my-register name="register" route={{route}}></my-register>
@@ -171,12 +173,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 			},
 
 			logout: function() {
+				this.$.session.logout();
         this.$.logoutDialog.open();
 			},
 
       onLogoutDialogClose: function() {
-				this.$.session.logout();
         this.set('route.path', '/login');
+      },
+
+      handlePageSelected: function(event) {
+        var page = event.detail.item;
+        if (page.onEnter) {
+          page.onEnter();
+        }
+      },
+
+      handlePageDeselected: function(event) {
+        var page = event.detail.item;
+        if (page.onExit) {
+          page.onExit();
+        }
       },
 
       observers: [
@@ -195,12 +211,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // console.log("logged: " + this.logged + " - page: " + page);
 
 				if(!this.logged && !this.unloggedPages.includes(page)) {
-				  // window.location.href = 'login';
           // console.log("if 1");
           this.set('route.path', '/login');
           // console.log("if 2");
 				} else if(this.logged && this.unloggedPages.includes(page)) {
-				  // window.location.href = 'edit-profile';
           // console.log("else if 1");
           this.set('route.path', '/edit-profile');
           // console.log("else if 2");

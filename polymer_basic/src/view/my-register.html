@@ -14,7 +14,9 @@
     </style>
 
     <div class="card">
-			<register-form on-register-sucess='onRegisterSucess'></register-form>
+			<register-form
+        id="registerForm"
+        on-register-sucess='onRegisterSucess'></register-form>
 		</div>
 
     <user-session id="session"></user-session>
@@ -23,6 +25,10 @@
   <script>
     Polymer({
       is: 'my-register',
+
+      onEnter: function() {
+        this.$.registerForm.clearFields();
+      },
 
       onRegisterSucess: function(event) {
         var auth_token = event.detail;

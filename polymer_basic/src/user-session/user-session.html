@@ -31,7 +31,7 @@
         this.$.storage.save();
 			},
 
-			logout: function(token) {
+			logout: function() {
 				this.set('config.token', null);
 				this.set('config.logged', false);
         this.$.storage.save();

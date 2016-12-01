@@ -86,6 +86,19 @@
         this.$.xhr.submit();
       },
 
+      clearFields: function() {
+        this.$.email.value = '';
+        this.$.password.value = '';
+        this.$.email.invalid = false;
+        this.$.password.invalid = false;
+      },
+
+      onDialogClose: function() {
+        this.clearFields();
+        var auth_token = this.$.xhr.getLastResponse()['auth_token'];
+        this.fire('login-sucess', auth_token);
+      },
+
       handleError: function() {
         this._setActiveSpinner(false);
       },
@@ -93,14 +106,6 @@
       handleResponse: function() {
         this._setActiveSpinner(false);
         this.$.dialog.open();
-      },
-
-      onDialogClose: function() {
-        this.$.email.value = '';
-        this.$.password.value = '';
-
-        var auth_token = this.$.xhr.getLastResponse()['auth_token'];
-        this.fire('login-sucess', auth_token);
       },
 
       _setActiveSpinner: function(active) {

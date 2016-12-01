@@ -65,7 +65,7 @@
       url="/users/get_user"></ajax-form>
 
     <paper-dialog id="dialog" class="popup"
-      on-iron-overlay-canceled="onDialogClose"
+      on-iron-overlay-canceled="clearFields"
       entry-animation="scale-up-animation"
       exit-animation="fade-out-animation">
 
@@ -83,9 +83,26 @@
         this.$.xhrGetUser.submit();
       },
 
+      onEnter: function() {
+        this.$.loginForm.clearFields();
+      },
+
       submit: function() {
         this._setActiveSpinner(true);
         this.$.xhrUpdate.submit();
+      },
+
+      clearFields: function() {
+        this.$.xhrGetUser.submit();
+        this.$.password.value = '';
+        this.$.password_confirmation.value = '';
+        this.$.current_password.value = '';
+
+        this.$.name.invalid = false;
+        this.$.email.invalid = false;
+        this.$.password.invalid = false;
+        this.$.password_confirmation.invalid = false;
+        this.$.current_password.invalid = false;
       },
 
       getUserResponse: function() {
@@ -105,12 +122,6 @@
         this._setActiveSpinner(false);
         this.$.spinner.active = false;
         this.$.dialog.open();
-      },
-
-      onDialogClose: function() {
-        this.$.password.value = '';
-        this.$.password_confirmation.value = '';
-        this.$.current_password.value = '';
       },
 
       _setActiveSpinner: function(active) {
