@@ -8,11 +8,19 @@ sudo apt-get dist-upgrade -y
 
 echo "Install basic dependencies"
 sudo apt-get install vim -y
-sudo apt-get install mkalias -y
 sudo apt-get install build-essential -y
+sudo apt-get install mkalias -y
+mkalias add_signal
+source ~/.bashrc
 
 echo "Install Rails"
-./dependencies/rails_dependencies.sh
+/vagrant/dependencies/rails_dependencies.sh
+
+echo "Install Polymer"
+/vagrant/dependencies/polymer_dependencies.sh
 
 echo "Create alias '$ rs' to run Rails Server"
 mkalias new rs "cd /vagrant/rails_basic" "rails s -b 0.0.0.0 #@"
+
+echo "Create alias '$ ps' to run Polymer Server"
+mkalias new rs "cd /vagrant/polymer_basic" "polymer serve -H 0.0.0.0 #@"
