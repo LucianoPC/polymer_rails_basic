@@ -4,6 +4,9 @@ echo "Install Rails Dependency: Ruby"
 sudo apt-get install ruby -y
 sudo apt-get install ruby-dev -y
 
+echo "Install Rails Dependency: Build-Essential"
+sudo apt-get install build-essential -y
+
 echo "Install Rails Dependency: NodeJS"
 sudo apt-get install nodejs -y
 
@@ -30,10 +33,3 @@ sudo apt-get install sqlite3 libsqlite3-dev -y
 
 echo "Install gem Rails 5"
 sudo gem install rails
-
-echo "Run Bundle install on Rails Project"
-cd /vagrant/rails_basic
-bundle install
-
-echo "Run database migrations"
-rake db:migrate
