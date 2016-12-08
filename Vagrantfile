@@ -3,8 +3,7 @@
 
 Vagrant.configure(2) do |config|
 
-  config.vm.box = "debian/jessie64"
-  config.vm.box_check_update = false
+  config.vm.box = "ideegeo/debian-sid"
   config.vm.network :forwarded_port, host: 8080, guest: 8080
   config.vm.network :forwarded_port, host: 3000, guest: 3000
   # config.vm.provision :shell, path: "vagrant/bootstrap.sh", privileged: false
